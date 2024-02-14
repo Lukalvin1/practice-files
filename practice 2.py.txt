@@ -1,0 +1,44 @@
+from collections import deque
+
+class Kamagera:
+    def __init__(self, commission_rate, bus_capacity) :
+        self.commission_rate = commission_rate
+        self.bus_capacity = bus_capacity
+        self.queue = deque
+        self.earning = 0
+        self.time = 0
+
+    def manage_bus_stop(self, arrival_rate, rush_hour_start, rush_hour_end):
+        while self.time < rush_hour_end:
+            is_rush_hour = rush_hour_start <= self.time < rush_hour_end
+
+            if is_rush_hour:
+                for _ in range(arrival_rate):
+                    self.queue.append(1)
+
+            while self.queue and len(self.queue) >= self.bus_capacity:
+                self.load_bus()
+
+            self.time +=1
+        while self.queue:
+            self.load_bus()
+
+    def load_bus(self):
+        bus_load = min(self.bus_capacity, len(self.queue))
+        self.queue = deque(list(self.queue)[bus_load:])
+        self.earnings += bus_load * self.commision_rate
+        print(f"Bus leaving at time{self.time}. Earnings: {self.earnings}. Passengers onboard: {bus_load}")
+
+if __name__ == "__main__" :
+    commission_rate = 50
+    bus_capacity = 40
+    kamagera = Kamagera(commission_rate, bus_capacity)
+
+    arrival_rate = 20
+    rush_hour_start = 1700
+    rush_hour_end =1900
+
+    kamagera.manage_bus_stop(arrival_rate, rush_hour_start, rush_hour_end)
+
+    print(f"\nTotal earnings during rush hour:{kamagera.earnings} Ksh")
+    print(f"Total commuters moved: {kamagera.earnings // commission_rate}")
